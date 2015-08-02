@@ -1,0 +1,29 @@
+{
+  "name": "raspy-alarm-hw",
+  "version": "0.0.0",
+  "description": "Hardware controller for an alarm clock running on a raspberry pi.",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/donmccurdy/raspy-alarm-hw.git"
+  },
+  "keywords": [
+    "raspberry",
+    "pi",
+    "remote",
+    "alarm",
+    "clock"
+  ],
+  "author": "Don McCurdy <dm@donmccurdy.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/donmccurdy/raspy-alarm-hw/issues"
+  },
+  "homepage": "https://github.com/donmccurdy/raspy-alarm-hw",
+  "dependencies": {
+    "play-sound": "0.0.5"
+  }
+}
