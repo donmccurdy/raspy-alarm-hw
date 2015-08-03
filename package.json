@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/donmccurdy/raspy-alarm-hw",
   "dependencies": {
+    "eventify": "^2.0.0",
     "play-sound": "0.0.5"
   }
 }
