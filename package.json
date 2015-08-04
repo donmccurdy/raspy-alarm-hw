@@ -25,6 +25,8 @@
   "homepage": "https://github.com/donmccurdy/raspy-alarm-hw",
   "dependencies": {
     "eventify": "^2.0.0",
+    "lodash": "^3.10.0",
+    "moment": "^2.10.6",
     "play-sound": "0.0.5"
   }
 }

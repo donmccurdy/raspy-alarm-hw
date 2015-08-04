@@ -1,30 +1,73 @@
-var Eventify = require('eventify');
+var _ = require('lodash'),
+	Eventify = require('eventify'),
+	moment = require('moment');
 
-function Alarm (hours, minutes) {
-	this.hours = +hours;
-	this.minutes = +minutes;
+/**
+ * Instance of a single-use or recurring alarm.
+ *
+ * @param {array<int>} days 	Array of zero-indexed integers.
+ * @param {int} hours			Hours.
+ * @param {int} minutes			Minutes.
+ */
+function Alarm (options) {
+	this.id = options.id;
+	this.days = options.days;
+	this.hours = options.hours;
+	this.minutes = options.minutes;
 	this.timerID = 0;
+
 	Eventify.enable(this);
 }
 
-Alarm.prototype.interval = function () {
-	var date = new Date();
-	var minutesMS = (date.getMinutes() - this.minutes) * 60 * 1000;
-	var hoursMS = (date.getHours() - this.hours) * 60 * 60 * 1000;
-	return hoursMS + minutesMS;
-};
+_.merge(Alarm.prototype, {
 
-Alarm.prototype.enable = function () {
-	this.timerID = setTimeout(function () {
-		this.trigger('fire');
-		this.timerID = 0;
-	}.bind(this), this.interval());
-};
+	/**
+	 * Returns the interval until the next occurrence of the alarm.
+	 * @return {int}
+	 */
+	interval: function () {
+		var currentDate = moment();
+		var dates = this.days.map(function (day) {
+			var date = moment()
+				.day(day)
+				.hours(this.hours)
+				.minutes(this.minutes);
+			return date.isAfter(currentDate) ? date : date.day(day + 7);
+		}.bind(this));
+		return moment.duration(
+			moment().diff(moment.min.apply(moment, dates))
+		);
+	},
 
-Alarm.prototype.disable = function () {
-	if (this.timerID) {
-		clearTimeout(this.timerID);
+	/**
+	 * Enables the alarm.
+	 */
+	enable: function () {
+		var interval = this.interval();
+
+		if (interval.milliseconds() < 0) return;
+
+		this.timerID = setTimeout(function () {
+			this.trigger('fire');
+			this.timerID = 0;
+		}.bind(this), interval.milliseconds());
+
+		console.log(
+			'alarm set for %s (%d) from now',
+			interval.humanize(),
+			interval.milliseconds()
+		);
+	},
+
+	/**
+	 * Disables the alarm.
+	 */
+	disable: function () {
+		if (this.timerID) {
+			clearTimeout(this.timerID);
+		}
 	}
-};
+
+});
 
 module.exports = Alarm;
