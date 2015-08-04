@@ -31,12 +31,12 @@ _.merge(Alarm.prototype, {
 			var date = moment()
 				.day(day)
 				.hours(this.hours)
-				.minutes(this.minutes);
+				.minutes(this.minutes)
+				.seconds(0);
 			return date.isAfter(currentDate) ? date : date.day(day + 7);
 		}.bind(this));
-		return moment.duration(
-			moment().diff(moment.min.apply(moment, dates))
-		);
+		var nextDate = moment.min.apply(moment, dates);
+		return moment.duration(nextDate.diff(moment()));
 	},
 
 	/**
@@ -45,18 +45,12 @@ _.merge(Alarm.prototype, {
 	enable: function () {
 		var interval = this.interval();
 
-		if (interval.milliseconds() < 0) return;
+		if (interval.asMilliseconds() < 0) return;
 
 		this.timerID = setTimeout(function () {
 			this.trigger('fire');
 			this.timerID = 0;
-		}.bind(this), interval.milliseconds());
-
-		console.log(
-			'alarm set for %s (%d) from now',
-			interval.humanize(),
-			interval.milliseconds()
-		);
+		}.bind(this), interval.asMilliseconds());
 	},
 
 	/**
@@ -65,6 +59,7 @@ _.merge(Alarm.prototype, {
 	disable: function () {
 		if (this.timerID) {
 			clearTimeout(this.timerID);
+			this.timerID = 0;
 		}
 	}
 
