@@ -32,22 +32,46 @@ module.exports = function (grunt) {
 	/**
 	 * Provision a new SQLite3 database.
 	 */
-	grunt.registerTask('provision', 'initialize the db', function () {
+	grunt.registerTask('provision', function () {
+		var done = this.async();
 		var db = new sqlite3.Database(DATABASE);
 		db.serialize(function () {
-			console.log(chalk.dim('Creating database...'));
+			db.run('DROP TABLE IF EXISTS alarms');
+
 			db.run(''
 				+ 'CREATE TABLE alarms ('
-				+	'id PRIMARY KEY, '
+				+	'id INTEGER PRIMARY KEY, '
 				+	'hours INTEGER, '
 				+	'minutes INTEGER, '
-				+	'days TEXT '
-				+ ')');
-			console.log(chalk.dim('Inserting initial alarm...'));
-			db.run('INSERT INTO alarms VALUES (1, 8, 0, "[0,1,2,3,4,5,6]")');
-			db.close();
-			console.log(chalk.bgGreen('Database provisioned.'));
+				+	'days TEXT'
+				+ ')',
+				function (error) {
+					if(error) {
+						console.log(error);
+						console.log(chalk.red('Failed to create table.'));
+						console.log(chalk.bgRed('Provisioning failed.'));
+						done();
+					} else {
+						console.log(chalk.dim('Created table.'));
+					}
+				}
+			);
+
+			db.run(
+				'INSERT INTO alarms VALUES (1, 8, 0, "[0,1,2,3,4,5,6]")',
+				function (error) {
+					if (error) {
+						console.log(chalk.red('Failed to insert initial alarm'));
+						console.log(chalk.bgRed('Provisioning failed.'));
+					} else {
+						console.log(chalk.dim('Created initial alarm.'));
+						console.log('\n' + chalk.bgGreen('Database provisioned.') + ' 🍺');
+					}
+					done();
+				}
+			);
 		});
+		db.close();
 	});
 
 };
