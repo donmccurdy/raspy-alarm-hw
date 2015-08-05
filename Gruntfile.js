@@ -45,6 +45,7 @@ module.exports = function (grunt) {
 				+ ')');
 			console.log(chalk.dim('Inserting initial alarm...'));
 			db.run('INSERT INTO alarms VALUES (1, 8, 0, "[0,1,2,3,4,5,6]")');
+			db.close();
 			console.log(chalk.bgGreen('Database provisioned.'));
 		});
 	});
