@@ -25,8 +25,14 @@
   "homepage": "https://github.com/donmccurdy/raspy-alarm-hw",
   "dependencies": {
     "eventify": "^2.0.0",
+    "grunt": "^0.4.5",
     "lodash": "^3.10.0",
     "moment": "^2.10.6",
-    "play-sound": "0.0.5"
+    "play-sound": "0.0.5",
+    "sqlite3": "^3.0.9"
+  },
+  "devDependencies": {
+    "chalk": "^1.1.0",
+    "grunt-nodemon": "^0.4.0"
   }
 }

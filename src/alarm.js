@@ -23,7 +23,7 @@ _.merge(Alarm.prototype, {
 
 	/**
 	 * Returns the interval until the next occurrence of the alarm.
-	 * @return {int}
+	 * @return {Duration}
 	 */
 	interval: function () {
 		var currentDate = moment();
