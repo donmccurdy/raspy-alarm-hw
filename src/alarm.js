@@ -22,10 +22,10 @@ function Alarm (options) {
 _.merge(Alarm.prototype, {
 
 	/**
-	 * Returns the interval until the next occurrence of the alarm.
-	 * @return {Duration}
+	 * Returns the next moment the alarm should fire.
+	 * @return {Moment}
 	 */
-	interval: function () {
+	next: function () {
 		var currentDate = moment();
 		var dates = this.days.map(function (day) {
 			var date = moment()
@@ -35,22 +35,25 @@ _.merge(Alarm.prototype, {
 				.seconds(0);
 			return date.isAfter(currentDate) ? date : date.day(day + 7);
 		}.bind(this));
-		var nextDate = moment.min.apply(moment, dates);
-		return moment.duration(nextDate.diff(moment()));
+		return moment.min.apply(moment, dates);
 	},
 
 	/**
 	 * Enables the alarm.
 	 */
 	enable: function () {
-		var interval = this.interval();
-
-		if (interval.asMilliseconds() < 0) return;
+		var next = this.next();
+		var interval = moment.duration(next.diff(moment()));
+		if (interval.asMilliseconds() < 0) {
+			throw 'Cannot set alarm for negative duration.';
+		}
 
 		this.timerID = setTimeout(function () {
 			this.trigger('fire');
 			this.timerID = 0;
 		}.bind(this), interval.asMilliseconds());
+
+		console.log('Alarm set for %s.', next.calendar().toLowerCase());
 	},
 
 	/**

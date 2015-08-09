@@ -1,19 +1,20 @@
 var Alarm = require('./alarm'),
-	Player = require('play-sound');
+	Player = require('play-sound'),
+	sqlite3 = require('sqlite3');
 
-var ALARM_AUDIO = './alarm.mp3';
-var ALARM_TIMES = [
-	{id: 1, hours: 23, minutes: 55, days: [0,1,2,3,4,5,6]},
-	{id: 2, hours: 23, minutes: 56, days: [0,1,2,3,4,5,6]}
-];
+require('dotenv').load();
 
+var db = new sqlite3.Database(process.env.DATABASE),
+	player = new Player({});
 
-var player = new Player({});
+db.each('SELECT * FROM alarms', function (error, row) {
+	if (error) throw error;
 
-ALARM_TIMES.forEach(function (options) {
-	var alarm = new Alarm(options);
+	row.days = JSON.parse(row.days);
+
+	var alarm = new Alarm(row);
 	alarm.on('fire', function () {
-		player.play(ALARM_AUDIO);
+		player.play('./alarm.mp3');
 	});
 	alarm.enable();
 });

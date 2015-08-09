@@ -1,9 +1,9 @@
 var sqlite3 = require('sqlite3'),
 	chalk = require('chalk');
 
-module.exports = function (grunt) {
+require('dotenv').load();
 
-	var DATABASE = '../data/alarms.sqlite3';
+module.exports = function (grunt) {
 
 	grunt.initConfig({
 		nodemon: {
@@ -11,7 +11,6 @@ module.exports = function (grunt) {
 				script: 'src/app.js',
 				options: {
 					nodeArgs: ['--harmony'],
-					env: {DATABASE: DATABASE},
 					watch: ['src'],
 					ignore: [
 						'node_modules/**',
@@ -34,7 +33,7 @@ module.exports = function (grunt) {
 	 */
 	grunt.registerTask('provision', function () {
 		var done = this.async();
-		var db = new sqlite3.Database(DATABASE);
+		var db = new sqlite3.Database(process.env.DATABASE);
 		db.serialize(function () {
 			db.run('DROP TABLE IF EXISTS alarms');
 

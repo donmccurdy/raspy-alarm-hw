@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/donmccurdy/raspy-alarm-hw",
   "dependencies": {
+    "dotenv": "^1.2.0",
     "eventify": "^2.0.0",
     "grunt": "^0.4.5",
     "lodash": "^3.10.0",
