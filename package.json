@@ -1,7 +1,7 @@
 {
   "name": "raspy-alarm-hw",
   "version": "0.0.0",
-  "description": "Hardware controller for an alarm clock running on a raspberry pi.",
+  "description": "Hardware controller for an alarm clock running on a Raspberry Pi.",
   "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
