@@ -1,20 +1,24 @@
-var Alarm = require('./alarm'),
-	Player = require('play-sound'),
-	sqlite3 = require('sqlite3');
+var fs = require('fs'),
+	Alarm = require('./alarm'),
+	sqlite3 = require('sqlite3'),
+	db = new sqlite3.Database(process.env.DATABASE);
 
 require('dotenv').load();
 
-var db = new sqlite3.Database(process.env.DATABASE),
-	player = new Player({});
+var alarms = [];
 
-db.each('SELECT * FROM alarms', function (error, row) {
-	if (error) throw error;
+function load () {
+	alarms.forEach(function (alarm) { alarm.disable(); });
 
-	row.days = JSON.parse(row.days);
-
-	var alarm = new Alarm(row);
-	alarm.on('fire', function () {
-		player.play('./alarm.mp3');
+	db.all('SELECT * FROM alarms', function (error, rows) {
+		if (error) throw error;
+		alarms = rows.map(function (row) {
+			row.days = JSON.parse(row.days);
+			var alarm = new Alarm(row);
+			return alarm.enable();
+		});
 	});
-	alarm.enable();
-});
+}
+
+fs.watch(process.env.DATABASE, load);
+load();

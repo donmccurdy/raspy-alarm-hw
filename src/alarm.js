@@ -1,6 +1,9 @@
 var _ = require('lodash'),
 	Eventify = require('eventify'),
+	Player = require('play-sound'),
 	moment = require('moment');
+
+var audio = new Player({});
 
 /**
  * Instance of a single-use or recurring alarm.
@@ -17,6 +20,7 @@ function Alarm (options) {
 	this.timerID = 0;
 
 	Eventify.enable(this);
+	this.on('fire', this.fire.bind(this));
 }
 
 _.merge(Alarm.prototype, {
@@ -49,11 +53,12 @@ _.merge(Alarm.prototype, {
 		}
 
 		this.timerID = setTimeout(function () {
-			this.trigger('fire');
 			this.timerID = 0;
+			this.trigger('fire');
 		}.bind(this), interval.asMilliseconds());
 
-		console.log('Alarm set for %s.', next.calendar().toLowerCase());
+		console.log('Alarm SET for %s.', next.calendar().toLowerCase());
+		return this;
 	},
 
 	/**
@@ -63,7 +68,26 @@ _.merge(Alarm.prototype, {
 		if (this.timerID) {
 			clearTimeout(this.timerID);
 			this.timerID = 0;
+			console.log(
+				'Alarm DISABLED for %s.',
+				this.next().calendar().toLowerCase()
+			);
 		}
+		return this;
+	},
+
+	fire: function () {
+		audio.play('./alarm.mp3');
+		this.enable();
+		return this;
+	},
+
+	/**
+	 * Disables the current alarm (if active) and
+	 * rearms for the next appropriate day.
+	 */
+	reset: function () {
+		throw 'Not implemented.';
 	}
 
 });
