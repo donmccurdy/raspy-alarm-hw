@@ -27,9 +27,10 @@
     "dotenv": "^1.2.0",
     "eventify": "^2.0.0",
     "grunt": "^0.4.5",
+    "lame": "^1.2.2",
     "lodash": "^3.10.0",
     "moment": "^2.10.6",
-    "play-sound": "0.0.5",
+    "speaker": "^0.2.5",
     "sqlite3": "^3.0.9"
   },
   "devDependencies": {

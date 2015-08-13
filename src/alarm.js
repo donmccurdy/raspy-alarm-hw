@@ -1,9 +1,9 @@
 var _ = require('lodash'),
 	Eventify = require('eventify'),
-	Player = require('play-sound'),
+	Audio = require('./audio'),
 	moment = require('moment');
 
-var audio = new Player({});
+var FIRE_DELAY = 6000;
 
 /**
  * Instance of a single-use or recurring alarm.
@@ -14,13 +14,19 @@ var audio = new Player({});
  */
 function Alarm (options) {
 	this.id = options.id;
+
 	this.days = options.days;
 	this.hours = options.hours;
 	this.minutes = options.minutes;
+
+	this.audio = new Audio();
+	this.isFiring = true;
 	this.timerID = 0;
+	this.pauseID = 0;
 
 	Eventify.enable(this);
 	this.on('fire', this.fire.bind(this));
+	this.audio.on('stop', this.delayedFire.bind(this));
 }
 
 _.merge(Alarm.prototype, {
@@ -76,10 +82,23 @@ _.merge(Alarm.prototype, {
 		return this;
 	},
 
+	/**
+	 * Wakey wakey.
+	 */
 	fire: function () {
-		audio.play('./alarm.mp3');
-		this.enable();
+		this.isFiring = true;
+		this.audio.play();
 		return this;
+	},
+
+	/**
+	 * Pause briefly between audio loops, then fire.
+	 */
+	delayedFire: function () {
+		if (this.isFiring) {
+			console.log('Alarm PAUSING for %d', FIRE_DELAY);
+			this.pauseID = setTimeout(this.fire.bind(this), FIRE_DELAY);
+		}
 	},
 
 	/**
@@ -87,7 +106,14 @@ _.merge(Alarm.prototype, {
 	 * rearms for the next appropriate day.
 	 */
 	reset: function () {
-		throw 'Not implemented.';
+		this.isFiring = false;
+		this.audio.stop();
+		if (this.pauseID) {
+			clearTimeout(this.pauseID);
+			this.pauseID = 0;
+		}
+		this.enable();
+		return this;
 	}
 
 });

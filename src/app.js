@@ -1,9 +1,9 @@
+require('dotenv').load();
+
 var fs = require('fs'),
 	Alarm = require('./alarm'),
 	sqlite3 = require('sqlite3'),
 	db = new sqlite3.Database(process.env.DATABASE);
-
-require('dotenv').load();
 
 var alarms = [];
 
