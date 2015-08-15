@@ -96,7 +96,6 @@ _.merge(Alarm.prototype, {
 	 */
 	delayedFire: function () {
 		if (this.isFiring) {
-			console.log('Alarm PAUSING for %d', FIRE_DELAY);
 			this.pauseID = setTimeout(this.fire.bind(this), FIRE_DELAY);
 		}
 	},
