@@ -1,11 +1,10 @@
 var _ = require('lodash'),
 	chalk = require('chalk');
 
-
 /**
  * CLIDisplay
  *
- * CLI-based display for debugging on machines without IO.
+ * Stdout display for debugging on machines without hardware IO.
  */
 function CLIDisplay () {}
 

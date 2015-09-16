@@ -17,11 +17,11 @@ function Display () {
 
 	this.board.on('ready', function () {
 		// Create HT16K33 controller.
-    	this.matrix = new five.Led.Matrix({controller: 'HT16K33'});
-    	this.matrix.brightness(DEFAULTS.brightness);
+		this.matrix = new five.Led.Matrix({controller: 'HT16K33'});
+		this.matrix.brightness(DEFAULTS.brightness);
 
-    	// Set time, if provided.
-    	if (this.moment) this.set(this.moment);
+		// Set time, if provided.
+		if (this.moment) this.set(this.moment);
 	}.bind(this));
 
 }

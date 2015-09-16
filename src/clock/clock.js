@@ -30,8 +30,8 @@ _.merge(Clock.prototype, {
 		this.timerID = setInterval(this.tick.bind(this), INTERVAL);
 	},
 
-	stop:  function () {
-		this.clearTimeout(this.timerID);
+	stop: function () {
+		clearTimeout(this.timerID);
 	},
 
 	tick: function () {
