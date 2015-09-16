@@ -29,8 +29,8 @@ function Display () {
 _.merge(Display.prototype, {
 
 	set: function (moment) {
-		var hours = moment.hours(),
-			minutes = moment.minutes();
+		var hours = moment.format('hh'),
+			minutes = moment.format('mm');
 
 		this.moment = moment;
 
