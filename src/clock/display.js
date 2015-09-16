@@ -5,6 +5,12 @@ var _ = require('lodash'),
 var DIGITS = [0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F],
 	DEFAULTS = { brightess: 50 };
 
+/**
+ * Display
+ *
+ * Hardware-based display for Raspberry Pi, using a HT16K33 
+ * backpack controller.
+ */
 function Display () {
 	this.board = new five.Board({io: new Raspi()});
 	this.matrix = null;
