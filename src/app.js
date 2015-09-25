@@ -1,11 +1,13 @@
 require('dotenv').load();
 
 var fs = require('fs'),
+	Clock = require('./clock/clock'),
 	Alarm = require('./alarm'),
 	sqlite3 = require('sqlite3'),
 	db = new sqlite3.Database(process.env.DATABASE);
 
-var alarms = [];
+var alarms = [],
+	clock = new Clock();
 
 function load () {
 	alarms.forEach(function (alarm) { alarm.disable(); });
