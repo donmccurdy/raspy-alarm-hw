@@ -27,7 +27,7 @@
     "dotenv": "^1.2.0",
     "eventify": "^2.0.0",
     "grunt": "^0.4.5",
-    "johnny-five": "git://github.com/donmccurdy/johnny-five#feat-HT16K33-digits",
+    "johnny-five": "^0.8.95",
     "lame": "^1.2.2",
     "lodash": "^3.10.0",
     "moment": "^2.10.6",
